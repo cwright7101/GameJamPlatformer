@@ -15,11 +15,11 @@ function scr_apply_physics(inst) {
         vsp += gravity_direction * grav * dt;
 
         // 3) Horizontal movement + collision
-        if (!place_meeting(new_x, y, obj_firetop)) {
+        if (!place_meeting(new_x, y, obj_Platform)) {
             x = new_x;
         } else {
             // hit a vertical face of the ground → stop X
-            var blocker = instance_place(new_x, y, obj_firetop);
+            var blocker = instance_place(new_x, y, obj_Platform);
             if (hsp > 0) {
                 // moving right → snap to left side
                 x = blocker.bbox_left - sprite_xoffset;
@@ -31,11 +31,11 @@ function scr_apply_physics(inst) {
         }
 
         // 4) Vertical movement + collision
-        if (!place_meeting(x, new_y, obj_firetop)) {
+        if (!place_meeting(x, new_y, obj_Platform)) {
             y = new_y;
         } else {
             // hit top/bottom face of the ground → stop Y
-            var blocker = instance_place(x, new_y, obj_firetop);
+            var blocker = instance_place(x, new_y, obj_Platform);
             if (vsp > 0 && gravity_direction == 1) {
                 // falling down onto it
                 y = blocker.bbox_top - sprite_yoffset;

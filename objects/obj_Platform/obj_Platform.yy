@@ -1,9 +1,9 @@
 {
   "$GMObject":"",
-  "%Name":"obj_firetop",
+  "%Name":"obj_Platform",
   "eventList":[],
   "managed":true,
-  "name":"obj_firetop",
+  "name":"obj_Platform",
   "overriddenProperties":[],
   "parent":{
     "name":"Objects",
