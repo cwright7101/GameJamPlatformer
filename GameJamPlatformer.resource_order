@@ -18,10 +18,15 @@
   ],
   "ResourceOrderSettings":[
     {"name":"obj_Blaze","order":1,"path":"objects/obj_Blaze/obj_Blaze.yy",},
-    {"name":"obj_Ground","order":2,"path":"objects/obj_Ground/obj_Ground.yy",},
+    {"name":"obj_firetop","order":2,"path":"objects/obj_firetop/obj_firetop.yy",},
+    {"name":"obj_icetop","order":4,"path":"objects/obj_icetop/obj_icetop.yy",},
     {"name":"obj_Player","order":3,"path":"objects/obj_Player/obj_Player.yy",},
+    {"name":"Level_1","order":1,"path":"rooms/Level_1/Level_1.yy",},
     {"name":"scr_apply_physics","order":1,"path":"scripts/scr_apply_physics/scr_apply_physics.yy",},
     {"name":"spr_glacia","order":1,"path":"sprites/spr_glacia/spr_glacia.yy",},
-    {"name":"spr_ground","order":2,"path":"sprites/spr_ground/spr_ground.yy",},
+    {"name":"spr_grass","order":3,"path":"sprites/spr_grass/spr_grass.yy",},
+    {"name":"spr_ice","order":5,"path":"sprites/spr_ice/spr_ice.yy",},
+    {"name":"spr_lava","order":4,"path":"sprites/spr_lava/spr_lava.yy",},
+    {"name":"Sprite6","order":16,"path":"sprites/Sprite6/Sprite6.yy",},
   ],
 }

@@ -1,15 +1,18 @@
 {
   "$GMObject":"",
-  "%Name":"obj_Ground",
+  "%Name":"obj_icetop",
   "eventList":[],
   "managed":true,
-  "name":"obj_Ground",
+  "name":"obj_icetop",
   "overriddenProperties":[],
   "parent":{
     "name":"Objects",
     "path":"folders/Objects.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_firetop",
+    "path":"objects/obj_firetop/obj_firetop.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -28,9 +31,12 @@
   "resourceVersion":"2.0",
   "solid":true,
   "spriteId":{
-    "name":"spr_ground",
-    "path":"sprites/spr_ground/spr_ground.yy",
+    "name":"spr_ice",
+    "path":"sprites/spr_ice/spr_ice.yy",
   },
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"spr_ice",
+    "path":"sprites/spr_ice/spr_ice.yy",
+  },
   "visible":true,
 }

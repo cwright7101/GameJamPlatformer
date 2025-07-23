@@ -16,7 +16,7 @@ function scr_handle_input(inst) {
         hsp = dir * move_speed;
 
         // 2) Can we jump?  Test one pixel *in* our gravity direction
-        can_jump = place_meeting(x, y + sign(gravity_direction), obj_Ground);
+        can_jump = place_meeting(x, y + sign(gravity_direction), obj_firetop);
 
         // 3) Jump opposite to gravity
         if (keyboard_check_pressed(vk_space) && can_jump) {

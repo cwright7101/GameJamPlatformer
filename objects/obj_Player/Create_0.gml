@@ -8,7 +8,7 @@ friction          = -600;
 move_speed        = 300;
 
 // jumping
-jump_strength = 400;
+jump_strength = 450;
 can_jump      = false;
 
 start_x = x;
