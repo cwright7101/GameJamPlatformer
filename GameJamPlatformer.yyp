@@ -36,14 +36,20 @@
   "name":"GameJamPlatformer",
   "resources":[
     {"id":{"name":"obj_Blaze","path":"objects/obj_Blaze/obj_Blaze.yy",},},
+    {"id":{"name":"obj_Coin","path":"objects/obj_Coin/obj_Coin.yy",},},
+    {"id":{"name":"obj_Controller","path":"objects/obj_Controller/obj_Controller.yy",},},
+    {"id":{"name":"obj_End","path":"objects/obj_End/obj_End.yy",},},
     {"id":{"name":"obj_firetop","path":"objects/obj_firetop/obj_firetop.yy",},},
     {"id":{"name":"obj_Glacia","path":"objects/obj_Glacia/obj_Glacia.yy",},},
     {"id":{"name":"obj_icetop","path":"objects/obj_icetop/obj_icetop.yy",},},
     {"id":{"name":"obj_Player","path":"objects/obj_Player/obj_Player.yy",},},
     {"id":{"name":"Level_1","path":"rooms/Level_1/Level_1.yy",},},
+    {"id":{"name":"Level_2","path":"rooms/Level_2/Level_2.yy",},},
     {"id":{"name":"scr_apply_physics","path":"scripts/scr_apply_physics/scr_apply_physics.yy",},},
     {"id":{"name":"scr_handle_input","path":"scripts/scr_handle_input/scr_handle_input.yy",},},
     {"id":{"name":"spr_blaze","path":"sprites/spr_blaze/spr_blaze.yy",},},
+    {"id":{"name":"spr_coin","path":"sprites/spr_coin/spr_coin.yy",},},
+    {"id":{"name":"spr_end","path":"sprites/spr_end/spr_end.yy",},},
     {"id":{"name":"spr_glacia","path":"sprites/spr_glacia/spr_glacia.yy",},},
     {"id":{"name":"spr_grass","path":"sprites/spr_grass/spr_grass.yy",},},
     {"id":{"name":"spr_ice","path":"sprites/spr_ice/spr_ice.yy",},},
@@ -54,6 +60,7 @@
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
     {"roomId":{"name":"Level_1","path":"rooms/Level_1/Level_1.yy",},},
+    {"roomId":{"name":"Level_2","path":"rooms/Level_2/Level_2.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
