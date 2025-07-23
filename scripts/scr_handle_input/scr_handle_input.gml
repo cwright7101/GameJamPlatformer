@@ -1,14 +1,18 @@
-/// scr_handle_input()
-/// Reads keyboard and sets hsp/jump flag
-function scr_handle_input()
-{
-	var dir = 0;
-	if keyboard_check(ord("A")) { dir -= 1; }
-	if keyboard_check(ord("D")) { dir += 1; }
-	hsp = dir * walk_speed;
+/// @function scr_handle_input(inst)
+/// @param inst  The instance to apply input to
+function scr_handle_input(inst) {
+    with (inst) {
+        // 1) Horizontal movement (arrows + A/D)
+        var dir = (keyboard_check(vk_right) || keyboard_check(ord("D")))
+                - (keyboard_check(vk_left ) || keyboard_check(ord("A")));
+        hsp = dir * move_speed;
 
-	// Jump key
-	if keyboard_check_pressed(vk_space) && can_jump {
-	    vsp = -gravity_direction * jump_strength;
-	}
+        // 2) Can we jump?  Test one pixel *in* our gravity direction
+        can_jump = place_meeting(x, y + sign(gravity_direction), obj_Ground);
+
+        // 3) Jump opposite to gravity
+        if (keyboard_check_pressed(vk_space) && can_jump) {
+            vsp = -gravity_direction * jump_strength;
+        }
+    }
 }

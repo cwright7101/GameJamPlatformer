@@ -1,25 +1,20 @@
-/// scr_apply_physics()
-function scr_apply_physics()
-{
-	/// Applies gravity and moves with collision
-	vsp += gravity_direction * grav * (delta_time/1000000); // adjust for frame rate
+function scr_apply_physics(inst) {
+    with (inst) {
+        var dt    = delta_time / 1_000_000;
+        var dir   = sign(hsp);          // +1, –1 or 0
+        var new_x = x + hsp * dt;
+        var new_y = y + vsp * dt;
 
-	// Horizontal move
-	x_prev = x;  
-	x += hsp * (delta_time/1000000);
-	if place_meeting(x, y, obj_Ground) {
-	    x = x_prev;
-	}
+        // only slow down when no input
+        if (dir == 0) {
+            hsp += friction * dt;
+        }
 
-	// Vertical move
-	y_prev = y;  
-	y += vsp * (delta_time/1000000);
-	if place_meeting(x, y, obj_Ground) {
-	    // landed: reset jump
-	    y = y_prev;
-	    vsp = 0;
-	    can_jump = true;
-	} else {
-	    can_jump = false;
-	}
+        // gravity
+        vsp += gravity_direction * grav * dt;
+
+        // move
+        x = new_x;
+        y = new_y;
+    }
 }

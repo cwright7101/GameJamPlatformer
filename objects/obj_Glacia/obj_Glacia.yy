@@ -34,8 +34,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_Glacia",
-    "path":"sprites/spr_Glacia/spr_Glacia.yy",
+    "name":"spr_glacia",
+    "path":"sprites/spr_glacia/spr_glacia.yy",
   },
   "spriteMaskId":null,
   "visible":true,

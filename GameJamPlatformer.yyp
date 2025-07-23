@@ -43,7 +43,7 @@
     {"id":{"name":"scr_apply_physics","path":"scripts/scr_apply_physics/scr_apply_physics.yy",},},
     {"id":{"name":"scr_handle_input","path":"scripts/scr_handle_input/scr_handle_input.yy",},},
     {"id":{"name":"spr_blaze","path":"sprites/spr_blaze/spr_blaze.yy",},},
-    {"id":{"name":"spr_Glacia","path":"sprites/spr_Glacia/spr_Glacia.yy",},},
+    {"id":{"name":"spr_glacia","path":"sprites/spr_glacia/spr_glacia.yy",},},
     {"id":{"name":"spr_ground","path":"sprites/spr_ground/spr_ground.yy",},},
   ],
   "resourceType":"GMProject",

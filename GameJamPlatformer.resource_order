@@ -21,7 +21,7 @@
     {"name":"obj_Ground","order":2,"path":"objects/obj_Ground/obj_Ground.yy",},
     {"name":"obj_Player","order":3,"path":"objects/obj_Player/obj_Player.yy",},
     {"name":"scr_apply_physics","order":1,"path":"scripts/scr_apply_physics/scr_apply_physics.yy",},
-    {"name":"spr_Glacia","order":1,"path":"sprites/spr_Glacia/spr_Glacia.yy",},
+    {"name":"spr_glacia","order":1,"path":"sprites/spr_glacia/spr_glacia.yy",},
     {"name":"spr_ground","order":2,"path":"sprites/spr_ground/spr_ground.yy",},
   ],
 }
