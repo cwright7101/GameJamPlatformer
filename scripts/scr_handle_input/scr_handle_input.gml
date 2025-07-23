@@ -2,6 +2,14 @@
 /// @param inst  The instance to apply input to
 function scr_handle_input(inst) {
     with (inst) {
+		if (keyboard_check_pressed(ord("R"))) {
+            x   = start_x;
+            y   = start_y;
+            hsp = 0;
+            vsp = 0;
+            can_jump = false;
+            return;  // skip all the other input this frame
+        }
         // 1) Horizontal movement (arrows + A/D)
         var dir = (keyboard_check(vk_right) || keyboard_check(ord("D")))
                 - (keyboard_check(vk_left ) || keyboard_check(ord("A")));
