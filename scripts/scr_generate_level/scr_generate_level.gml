@@ -1,7 +1,8 @@
 /// @function scr_generate_level()
 /// @description
-///   Clears old platforms, coins, and portal, then generates a new level layout
+///   Clears old platforms, coins, and portals, then generates a new level layout
 ///   densely populated with small platforms but with at most two coins per level.
+///   Places both an ice portal and a fire portal at the end within reach.
 function scr_generate_level() {
     // Ensure controller exists
     if (!instance_exists(obj_Controller)) return;
@@ -14,9 +15,10 @@ function scr_generate_level() {
     var max_gap   = 32;
 
     // Clear out any old instances
-    with (obj_Platform) instance_destroy();
-    with (obj_Coin)     instance_destroy();
-    with (obj_End)      instance_destroy();
+    with (obj_Platform)      instance_destroy();
+    with (obj_Coin)          instance_destroy();
+    with (obj_Iceportal)     instance_destroy();
+    with (obj_Fireportal)    instance_destroy();
 
     // Limit to two coins per level
     var coins_placed = 0;
@@ -35,8 +37,8 @@ function scr_generate_level() {
 
         // place a coin if we haven't reached the max
         if (coins_placed < max_coins) {
-            var cx = p.x + pw / 2;
-            var cy = p.y - sprite_get_height(spr_coin) / 2 - 8;
+            var cx = p.x + pw * 0.5;
+            var cy = p.y - sprite_get_height(spr_coin) * 0.5 - 8;
             instance_create_layer(cx, cy, "Instances", obj_Coin);
             coins_placed += 1;
         }
@@ -45,11 +47,20 @@ function scr_generate_level() {
         x_cursor += pw + irandom_range(min_gap, max_gap);
     }
 
-    // Place the exit portal at the far right
+    // Place the exit portals at the far right
     var last_index = instance_number(obj_Platform) - 1;
     var last_py    = last_index >= 0
         ? instance_find(obj_Platform, last_index).y
-        : room_height / 2;
+        : room_height * 0.5;
     var py_end = clamp(last_py - 64, 64, room_height - 64);
-    instance_create_layer(room_width - ctrl.portal_margin, py_end, "Instances", obj_End);
+
+    // base X position for portals
+    var x_base = room_width - ctrl.portal_margin;
+    // horizontal padding between portals
+    var pad    = 32;
+
+    // create ice portal to the left of base
+    instance_create_layer(x_base - pad, py_end, "Instances", obj_Iceportal);
+    // create fire portal to the right of base
+    instance_create_layer(x_base + pad, py_end, "Instances", obj_Fireportal);
 }
