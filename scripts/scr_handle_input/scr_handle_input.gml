@@ -27,10 +27,9 @@ function scr_handle_input(inst) {
     } else if (inst.object_index == obj_Glacia) {
         left_key    = vk_left;
         right_key   = vk_right;
-        normal_key  = vk_down;        // normal jump
-        charge_key  = vk_up;          // charge jump
+        normal_key  = vk_up;        // normal jump
+        charge_key  = vk_down;          // charge jump
     } else {
-        // fallback to Blaze mapping
         left_key    = ord("A");
         right_key   = ord("D");
         normal_key  = ord("W");

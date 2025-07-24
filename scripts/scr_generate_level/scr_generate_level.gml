@@ -2,8 +2,8 @@
 /// @description
 ///   Clears old platforms, coins, and portals, then generates a new level layout
 ///   densely populated with small platforms and places exactly two coins:
-///   one atop one platform and one beneath another, ensuring no coins spawn
-///   near the portal area. Always ensures a spawn platform on the far left center.
+///   one atop one platform and one beneath another; ensures no coins spawn
+///   on the far-left spawn platform or near the portal area.
 function scr_generate_level() {
     // Ensure controller exists
     if (!instance_exists(obj_Controller)) return;
@@ -28,14 +28,14 @@ function scr_generate_level() {
     var platform_list = ds_list_create();
 
     // 1) Spawn a guaranteed start platform at far left, vertically centered
-    // use the maximum width so it’s always the widest possible
-    var spawn_pw = max_w;
-    var spawn_py = room_height * 0.5;
-    var spawn    = instance_create_layer(0, spawn_py, "Instances", obj_Platform);
+    //    always maximum width
+    var spawn_pw  = max_w;
+    var spawn_py  = room_height * 0.5;
+    var spawn     = instance_create_layer(0, spawn_py, "Instances", obj_Platform);
     spawn.image_xscale = spawn_pw / sprite_get_width(spawn.sprite_index);
     ds_list_add(platform_list, spawn.id);
 
-    // 2) Generate additional platforms to fill to the portal region
+    // 2) Generate additional platforms
     var x_cursor = spawn_pw + irandom_range(min_gap, max_gap);
     while (x_cursor < portal_x) {
         var pw = irandom_range(min_w, max_w);
@@ -46,11 +46,11 @@ function scr_generate_level() {
         x_cursor += pw + irandom_range(min_gap, max_gap);
     }
 
-    // 3) Filter platforms far from portal X for coin placement
+    // 3) Filter platforms for coin placement (exclude spawn and portal-adjacent)
     var coin_list = ds_list_create();
     for (var i = 0; i < ds_list_size(platform_list); i++) {
         var pid = ds_list_find_value(platform_list, i);
-        if (!instance_exists(pid)) continue;
+        if (!instance_exists(pid) || pid == spawn.id) continue; // skip spawn platform
         with (pid) {
             var left_edge  = x;
             var right_edge = x + sprite_get_width(sprite_index) * image_xscale;
@@ -59,17 +59,18 @@ function scr_generate_level() {
             }
         }
     }
-    // Fallback: use all platforms if not enough safe ones
+    // Fallback: if too few safe platforms, use all except spawn
     if (ds_list_size(coin_list) < max_coins) {
         ds_list_destroy(coin_list);
         coin_list = ds_list_create();
         for (var j = 0; j < ds_list_size(platform_list); j++) {
-            ds_list_add(coin_list, ds_list_find_value(platform_list, j));
+            var pid2 = ds_list_find_value(platform_list, j);
+            if (pid2 != spawn.id) ds_list_add(coin_list, pid2);
         }
     }
     ds_list_shuffle(coin_list);
 
-    // 4) Place exactly two coins: first above, second below different platforms
+    // 4) Place exactly two coins: first above, second below selected platforms
     for (var c = 0; c < max_coins && c < ds_list_size(coin_list); c++) {
         var plat_id = ds_list_find_value(coin_list, c);
         if (!instance_exists(plat_id)) continue;
@@ -88,23 +89,21 @@ function scr_generate_level() {
         }
     }
     ds_list_destroy(coin_list);
-
-    // 5) Clean up platform list
     ds_list_destroy(platform_list);
 
-    // 6) Compute last platform Y for portal placement
+    // 5) Compute last platform Y for portal placement
     var last_idx = instance_number(obj_Platform) - 1;
-    var last_py  = last_idx >= 0
+    var last_py  = (last_idx >= 0)
                  ? instance_find(obj_Platform, last_idx).y
                  : room_height * 0.5;
     var py_end   = clamp(last_py - 64, 64, room_height - 64);
 
-    // 7) Portal placement bases (fire above, ice below)
+    // 6) Determine base Y for fire (above) & ice (below)
     var pad         = 32;
     var fire_base_y = clamp(py_end - pad, 64, room_height - 64);
     var ice_base_y  = clamp(py_end + pad, 64, room_height - 64);
 
-    // 8) Adjust fire portal Y to avoid platforms
+    // 7) Adjust fire portal Y to avoid platforms
     var fire_y = fire_base_y;
     for (var off = 0; off <= room_height; off++) {
         if (fire_base_y - off >= 64
@@ -119,7 +118,7 @@ function scr_generate_level() {
         }
     }
 
-    // 9) Adjust ice portal Y to avoid platforms
+    // 8) Adjust ice portal Y to avoid platforms
     var ice_y = ice_base_y;
     for (var off = 0; off <= room_height; off++) {
         if (ice_base_y + off <= room_height - 64
@@ -134,7 +133,7 @@ function scr_generate_level() {
         }
     }
 
-    // 10) Spawn portals
+    // 9) Spawn portals
     instance_create_layer(portal_x, fire_y, "Instances", obj_Fireportal);
     instance_create_layer(portal_x, ice_y,  "Instances", obj_Iceportal);
 }
