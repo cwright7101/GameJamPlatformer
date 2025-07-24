@@ -1,6 +1,5 @@
 // increment the global score
-global.score += 1;
+global.glacia_score += 1;
 
 // destroy just this coin instance
 instance_destroy();
-	

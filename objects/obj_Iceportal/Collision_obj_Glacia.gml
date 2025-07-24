@@ -1,7 +1,7 @@
-// bump the level
+/// obj_Iceportal – Collision with Glacia
 with (obj_Controller) {
     level_number += 1;
-    // reposition both players before spamming new platforms:
+    // reset both players
     with (obj_Player) {
         x       = start_x;
         y       = start_y;
@@ -9,7 +9,5 @@ with (obj_Controller) {
         vsp     = 0;
         can_jump= false;
     }
-
-    // now wipe & rebuild everything for the new level
     scr_generate_level();
 }

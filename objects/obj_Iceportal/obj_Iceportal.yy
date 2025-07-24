@@ -1,7 +1,9 @@
 {
   "$GMObject":"",
   "%Name":"obj_Iceportal",
-  "eventList":[],
+  "eventList":[
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":{"name":"obj_Glacia","path":"objects/obj_Glacia/obj_Glacia.yy",},"eventNum":0,"eventType":4,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+  ],
   "managed":true,
   "name":"obj_Iceportal",
   "overriddenProperties":[],
@@ -9,10 +11,7 @@
     "name":"Objects",
     "path":"folders/Objects.yy",
   },
-  "parentObjectId":{
-    "name":"obj_End",
-    "path":"objects/obj_End/obj_End.yy",
-  },
+  "parentObjectId":null,
   "persistent":true,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,

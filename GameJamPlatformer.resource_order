@@ -20,7 +20,6 @@
     {"name":"obj_Blaze","order":1,"path":"objects/obj_Blaze/obj_Blaze.yy",},
     {"name":"obj_Coin","order":5,"path":"objects/obj_Coin/obj_Coin.yy",},
     {"name":"obj_Controller","order":7,"path":"objects/obj_Controller/obj_Controller.yy",},
-    {"name":"obj_End","order":6,"path":"objects/obj_End/obj_End.yy",},
     {"name":"obj_Fireportal","order":8,"path":"objects/obj_Fireportal/obj_Fireportal.yy",},
     {"name":"obj_Iceportal","order":9,"path":"objects/obj_Iceportal/obj_Iceportal.yy",},
     {"name":"obj_icetop","order":4,"path":"objects/obj_icetop/obj_icetop.yy",},
@@ -37,6 +36,5 @@
     {"name":"spr_ice","order":5,"path":"sprites/spr_ice/spr_ice.yy",},
     {"name":"spr_iceportal","order":7,"path":"sprites/spr_iceportal/spr_iceportal.yy",},
     {"name":"spr_lava","order":4,"path":"sprites/spr_lava/spr_lava.yy",},
-    {"name":"Sprite6","order":16,"path":"sprites/Sprite6/Sprite6.yy",},
   ],
 }

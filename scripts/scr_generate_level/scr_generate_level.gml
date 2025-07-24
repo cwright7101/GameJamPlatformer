@@ -1,66 +1,140 @@
 /// @function scr_generate_level()
 /// @description
 ///   Clears old platforms, coins, and portals, then generates a new level layout
-///   densely populated with small platforms but with at most two coins per level.
-///   Places both an ice portal and a fire portal at the end within reach.
+///   densely populated with small platforms and places exactly two coins:
+///   one atop one platform and one beneath another, ensuring no coins spawn
+///   near the portal area. Always ensures a spawn platform on the far left center.
 function scr_generate_level() {
     // Ensure controller exists
     if (!instance_exists(obj_Controller)) return;
     var ctrl = instance_find(obj_Controller, 0);
 
-    // Tuning: small platforms & gaps for high density
-    var min_w     = 32;
-    var max_w     = 64;
-    var min_gap   = 16;
-    var max_gap   = 32;
+    // Configuration
+    var min_w          = 48;
+    var max_w          = 86;
+    var min_gap        = 16;
+    var max_gap        = 32;
+    var max_coins      = 2;
+    var exclude_buffer = 48; // pixels around portal X to avoid coin placement
+    var portal_x       = room_width - ctrl.portal_margin;
 
-    // Clear out any old instances
-    with (obj_Platform)      instance_destroy();
-    with (obj_Coin)          instance_destroy();
-    with (obj_Iceportal)     instance_destroy();
-    with (obj_Fireportal)    instance_destroy();
+    // Clear old instances
+    with (obj_Platform)   instance_destroy();
+    with (obj_Coin)       instance_destroy();
+    with (obj_Iceportal)  instance_destroy();
+    with (obj_Fireportal) instance_destroy();
 
-    // Limit to two coins per level
-    var coins_placed = 0;
-    var max_coins    = 2;
+    // Create platforms and track IDs
+    var platform_list = ds_list_create();
 
-    // Spawn platforms and up to max_coins coins
-    var x_cursor = 0;
-    while (x_cursor < room_width - ctrl.portal_margin) {
-        // choose platform width & vertical position
+    // 1) Spawn a guaranteed start platform at far left, vertically centered
+    // use the maximum width so it’s always the widest possible
+    var spawn_pw = max_w;
+    var spawn_py = room_height * 0.5;
+    var spawn    = instance_create_layer(0, spawn_py, "Instances", obj_Platform);
+    spawn.image_xscale = spawn_pw / sprite_get_width(spawn.sprite_index);
+    ds_list_add(platform_list, spawn.id);
+
+    // 2) Generate additional platforms to fill to the portal region
+    var x_cursor = spawn_pw + irandom_range(min_gap, max_gap);
+    while (x_cursor < portal_x) {
         var pw = irandom_range(min_w, max_w);
         var py = irandom_range(room_height * 0.25, room_height * 0.75);
-
-        // create platform and scale to 'pw' pixels
-        var p = instance_create_layer(x_cursor, py, "Instances", obj_Platform);
+        var p  = instance_create_layer(x_cursor, py, "Instances", obj_Platform);
         p.image_xscale = pw / sprite_get_width(p.sprite_index);
-
-        // place a coin if we haven't reached the max
-        if (coins_placed < max_coins) {
-            var cx = p.x + pw * 0.5;
-            var cy = p.y - sprite_get_height(spr_coin) * 0.5 - 8;
-            instance_create_layer(cx, cy, "Instances", obj_Coin);
-            coins_placed += 1;
-        }
-
-        // advance cursor by platform width + random gap
+        ds_list_add(platform_list, p.id);
         x_cursor += pw + irandom_range(min_gap, max_gap);
     }
 
-    // Place the exit portals at the far right
-    var last_index = instance_number(obj_Platform) - 1;
-    var last_py    = last_index >= 0
-        ? instance_find(obj_Platform, last_index).y
-        : room_height * 0.5;
-    var py_end = clamp(last_py - 64, 64, room_height - 64);
+    // 3) Filter platforms far from portal X for coin placement
+    var coin_list = ds_list_create();
+    for (var i = 0; i < ds_list_size(platform_list); i++) {
+        var pid = ds_list_find_value(platform_list, i);
+        if (!instance_exists(pid)) continue;
+        with (pid) {
+            var left_edge  = x;
+            var right_edge = x + sprite_get_width(sprite_index) * image_xscale;
+            if (right_edge < portal_x - exclude_buffer || left_edge > portal_x + exclude_buffer) {
+                ds_list_add(coin_list, pid);
+            }
+        }
+    }
+    // Fallback: use all platforms if not enough safe ones
+    if (ds_list_size(coin_list) < max_coins) {
+        ds_list_destroy(coin_list);
+        coin_list = ds_list_create();
+        for (var j = 0; j < ds_list_size(platform_list); j++) {
+            ds_list_add(coin_list, ds_list_find_value(platform_list, j));
+        }
+    }
+    ds_list_shuffle(coin_list);
 
-    // base X position for portals
-    var x_base = room_width - ctrl.portal_margin;
-    // horizontal padding between portals
-    var pad    = 32;
+    // 4) Place exactly two coins: first above, second below different platforms
+    for (var c = 0; c < max_coins && c < ds_list_size(coin_list); c++) {
+        var plat_id = ds_list_find_value(coin_list, c);
+        if (!instance_exists(plat_id)) continue;
+        with (plat_id) {
+            var cx = x + (image_xscale * sprite_get_width(sprite_index)) * 0.5;
+            var cy;
+            if (c == 0) {
+                // top coin
+                cy = y - sprite_get_height(spr_coin) * 0.5 - 8;
+            } else {
+                // bottom coin
+                cy = y + sprite_get_height(spr_coin) * 0.5 + 8;
+                cy = clamp(cy, 64, room_height - 64);
+            }
+            instance_create_layer(cx, cy, "Instances", obj_Coin);
+        }
+    }
+    ds_list_destroy(coin_list);
 
-    // create ice portal to the left of base
-    instance_create_layer(x_base - pad, py_end, "Instances", obj_Iceportal);
-    // create fire portal to the right of base
-    instance_create_layer(x_base + pad, py_end, "Instances", obj_Fireportal);
+    // 5) Clean up platform list
+    ds_list_destroy(platform_list);
+
+    // 6) Compute last platform Y for portal placement
+    var last_idx = instance_number(obj_Platform) - 1;
+    var last_py  = last_idx >= 0
+                 ? instance_find(obj_Platform, last_idx).y
+                 : room_height * 0.5;
+    var py_end   = clamp(last_py - 64, 64, room_height - 64);
+
+    // 7) Portal placement bases (fire above, ice below)
+    var pad         = 32;
+    var fire_base_y = clamp(py_end - pad, 64, room_height - 64);
+    var ice_base_y  = clamp(py_end + pad, 64, room_height - 64);
+
+    // 8) Adjust fire portal Y to avoid platforms
+    var fire_y = fire_base_y;
+    for (var off = 0; off <= room_height; off++) {
+        if (fire_base_y - off >= 64
+         && !place_meeting(portal_x, fire_base_y - off, obj_Platform)) {
+            fire_y = fire_base_y - off;
+            break;
+        }
+        if (fire_base_y + off <= room_height - 64
+         && !place_meeting(portal_x, fire_base_y + off, obj_Platform)) {
+            fire_y = fire_base_y + off;
+            break;
+        }
+    }
+
+    // 9) Adjust ice portal Y to avoid platforms
+    var ice_y = ice_base_y;
+    for (var off = 0; off <= room_height; off++) {
+        if (ice_base_y + off <= room_height - 64
+         && !place_meeting(portal_x, ice_base_y + off, obj_Platform)) {
+            ice_y = ice_base_y + off;
+            break;
+        }
+        if (ice_base_y - off >= 64
+         && !place_meeting(portal_x, ice_base_y - off, obj_Platform)) {
+            ice_y = ice_base_y - off;
+            break;
+        }
+    }
+
+    // 10) Spawn portals
+    instance_create_layer(portal_x, fire_y, "Instances", obj_Fireportal);
+    instance_create_layer(portal_x, ice_y,  "Instances", obj_Iceportal);
 }

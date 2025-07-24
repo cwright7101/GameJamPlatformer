@@ -1,7 +1,9 @@
 {
   "$GMObject":"",
   "%Name":"obj_Fireportal",
-  "eventList":[],
+  "eventList":[
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":{"name":"obj_Blaze","path":"objects/obj_Blaze/obj_Blaze.yy",},"eventNum":0,"eventType":4,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+  ],
   "managed":true,
   "name":"obj_Fireportal",
   "overriddenProperties":[],
@@ -9,10 +11,7 @@
     "name":"Objects",
     "path":"folders/Objects.yy",
   },
-  "parentObjectId":{
-    "name":"obj_End",
-    "path":"objects/obj_End/obj_End.yy",
-  },
+  "parentObjectId":null,
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
