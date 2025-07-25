@@ -135,5 +135,7 @@ function scr_generate_level() {
 
     // 9) Spawn portals
     instance_create_layer(portal_x, fire_y, "Instances", obj_Fireportal);
-    instance_create_layer(portal_x, ice_y,  "Instances", obj_Iceportal);
+	if(player_count > 1){
+	    instance_create_layer(portal_x, ice_y,  "Instances", obj_Iceportal);
+	}
 }
